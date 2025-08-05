@@ -1,0 +1,347 @@
+<%- include('head', { title: 'YARIGA - Add Agent' }) -%>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="d-flex align-items-center p-3 border-bottom">
+      <div class="d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#2563eb" class="bi bi-buildings me-2" viewBox="0 0 16 16">
+          <path d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022Z"/>
+        </svg>
+        <h4 class="mb-0 text-primary fw-bold">Yariga</h4>
+      </div>
+    </div>
+    
+    <div class="p-3">
+      <div class="nav flex-column">
+        <a href="/dashboard" class="nav-link mb-2">
+          <i class="bi bi-grid me-2"></i> Dashboard
+        </a>
+        <a href="/property" class="nav-link mb-2">
+          <i class="bi bi-building me-2"></i> Property
+        </a>
+        <a href="/agent" class="nav-link active mb-2">
+          <i class="bi bi-people me-2"></i> Agent
+        </a>
+        <a href="#" class="nav-link mb-2">
+          <i class="bi bi-star me-2"></i> Review
+        </a>
+        <a href="#" class="nav-link mb-2">
+          <i class="bi bi-chat me-2"></i> Message
+        </a>
+        <a href="#" class="nav-link">
+          <i class="bi bi-person me-2"></i> My Profile
+        </a>
+        <hr class="my-3">
+        <a href="/logout" class="nav-link text-danger">
+          <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
+      <div class="container-fluid px-4">
+        <div class="d-flex align-items-center">
+          <a href="/agent" class="btn btn-light me-3">
+            <i class="bi bi-arrow-left"></i>
+          </a>
+          <h5 class="mb-0 fw-bold">Add New Agent</h5>
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="position-relative me-3">
+            <button class="btn btn-light rounded-circle position-relative">
+              <i class="bi bi-bell"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                3
+              </span>
+            </button>
+          </div>
+          <div class="d-flex align-items-center">
+            <img src="https://ui-avatars.com/api/?name=<%= user.name %>&background=random" class="rounded-circle me-2" width="40" height="40">
+            <div>
+              <div class="fw-bold"><%= user.name %></div>
+              <small class="text-muted">Company Manager</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Add Agent Form -->
+    <div class="container-fluid px-4 py-4">
+      <%- message %>
+      
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+              <h5 class="card-title mb-4">Agent Information</h5>
+              
+              <form method="POST" action="/agent/add" enctype="multipart/form-data" novalidate>
+                <!-- Personal Information -->
+                <div class="row mb-4">
+                  <div class="col-12">
+                    <h6 class="text-muted mb-3">Personal Information</h6>
+                  </div>
+                  
+                  <!-- Avatar Upload -->
+                  <div class="col-12 mb-3">
+                    <label class="form-label">Profile Picture</label>
+                    <div class="d-flex align-items-center">
+                      <div class="avatar-preview me-3">
+                        <img id="avatarPreview" src="https://ui-avatars.com/api/?name=Agent&background=e3f2fd&color=1976d2&size=80" 
+                             class="rounded-circle" width="80" height="80" style="object-fit: cover;">
+                      </div>
+                      <div>
+                        <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
+                        <small class="text-muted">Upload a professional photo (JPG, PNG, max 2MB)</small>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="firstName" class="form-label">First Name *</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    <div class="invalid-feedback">Please provide a valid first name.</div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="lastName" class="form-label">Last Name *</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                    <div class="invalid-feedback">Please provide a valid last name.</div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">Email Address *</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <div class="invalid-feedback">Please provide a valid email address.</div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">Phone Number *</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                    <div class="invalid-feedback">Please provide a valid phone number.</div>
+                  </div>
+                </div>
+
+                <!-- Location Information -->
+                <div class="row mb-4">
+                  <div class="col-12">
+                    <h6 class="text-muted mb-3">Location Information</h6>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address">
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="city" class="form-label">City *</label>
+                    <input type="text" class="form-control" id="city" name="city" required>
+                    <div class="invalid-feedback">Please provide a city.</div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="state" class="form-label">State/Province</label>
+                    <input type="text" class="form-control" id="state" name="state">
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="country" class="form-label">Country *</label>
+                    <select class="form-select" id="country" name="country" required>
+                      <option value="">Select Country</option>
+                      <option value="United States">United States</option>
+                      <option value="Canada">Canada</option>
+                      <option value="United Kingdom">United Kingdom</option>
+                      <option value="Australia">Australia</option>
+                      <option value="Germany">Germany</option>
+                      <option value="France">France</option>
+                      <option value="Spain">Spain</option>
+                      <option value="Italy">Italy</option>
+                      <option value="Netherlands">Netherlands</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <div class="invalid-feedback">Please select a country.</div>
+                  </div>
+                </div>
+
+                <!-- Professional Information -->
+                <div class="row mb-4">
+                  <div class="col-12">
+                    <h6 class="text-muted mb-3">Professional Information</h6>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="agencyName" class="form-label">Agency Name *</label>
+                    <input type="text" class="form-control" id="agencyName" name="agencyName" required>
+                    <div class="invalid-feedback">Please provide an agency name.</div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="licenseNumber" class="form-label">License Number *</label>
+                    <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" required>
+                    <div class="invalid-feedback">Please provide a license number.</div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="experienceYears" class="form-label">Years of Experience *</label>
+                    <input type="number" class="form-control" id="experienceYears" name="experienceYears" min="0" max="50" required>
+                    <div class="invalid-feedback">Please provide years of experience.</div>
+                  </div>
+                  
+                  <div class="col-md-6 mb-3">
+                    <label for="joinDate" class="form-label">Join Date</label>
+                    <input type="date" class="form-control" id="joinDate" name="joinDate" value="<%= new Date().toISOString().split('T')[0] %>">
+                  </div>
+                  
+                  <div class="col-12 mb-3">
+                    <label for="specializations" class="form-label">Specializations</label>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="specializations" value="Residential Sales" id="spec1">
+                          <label class="form-check-label" for="spec1">Residential Sales</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="specializations" value="Commercial Sales" id="spec2">
+                          <label class="form-check-label" for="spec2">Commercial Sales</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="specializations" value="Property Management" id="spec3">
+                          <label class="form-check-label" for="spec3">Property Management</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="specializations" value="Luxury Properties" id="spec4">
+                          <label class="form-check-label" for="spec4">Luxury Properties</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="specializations" value="Investment Properties" id="spec5">
+                          <label class="form-check-label" for="spec5">Investment Properties</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="specializations" value="First-Time Buyers" id="spec6">
+                          <label class="form-check-label" for="spec6">First-Time Buyers</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-12 mb-3">
+                    <label for="bio" class="form-label">Bio/Description</label>
+                    <textarea class="form-control" id="bio" name="bio" rows="4" placeholder="Tell us about the agent's background, experience, and expertise..."></textarea>
+                    <small class="text-muted">Maximum 500 characters</small>
+                  </div>
+                </div>
+
+                <!-- Performance Metrics (Optional) -->
+                <div class="row mb-4">
+                  <div class="col-12">
+                    <h6 class="text-muted mb-3">Performance Metrics (Optional)</h6>
+                  </div>
+                  
+                  <div class="col-md-4 mb-3">
+                    <label for="totalListings" class="form-label">Total Listings</label>
+                    <input type="number" class="form-control" id="totalListings" name="totalListings" min="0" value="0">
+                  </div>
+                  
+                  <div class="col-md-4 mb-3">
+                    <label for="propertiesSold" class="form-label">Properties Sold</label>
+                    <input type="number" class="form-control" id="propertiesSold" name="propertiesSold" min="0" value="0">
+                  </div>
+                  
+                  <div class="col-md-4 mb-3">
+                    <label for="propertiesRent" class="form-label">Properties for Rent</label>
+                    <input type="number" class="form-control" id="propertiesRent" name="propertiesRent" min="0" value="0">
+                  </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="row">
+                  <div class="col-12">
+                    <div class="d-flex gap-2">
+                      <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-plus-circle me-2"></i>Add Agent
+                      </button>
+                      <a href="/agent" class="btn btn-outline-secondary px-4">Cancel</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Avatar preview
+document.getElementById('avatar').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('avatarPreview').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Form validation
+(function() {
+  'use strict';
+  
+  const form = document.querySelector('form');
+  
+  form.addEventListener('submit', function(event) {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    form.classList.add('was-validated');
+  }, false);
+})();
+
+// Bio character counter
+const bioTextarea = document.getElementById('bio');
+const maxLength = 500;
+
+bioTextarea.addEventListener('input', function() {
+  const remaining = maxLength - this.value.length;
+  const parent = this.parentElement;
+  let counter = parent.querySelector('.char-counter');
+  
+  if (!counter) {
+    counter = document.createElement('small');
+    counter.className = 'char-counter text-muted';
+    parent.appendChild(counter);
+  }
+  
+  counter.textContent = `${remaining} characters remaining`;
+  
+  if (remaining < 0) {
+    counter.className = 'char-counter text-danger';
+    this.value = this.value.substring(0, maxLength);
+  } else {
+    counter.className = 'char-counter text-muted';
+  }
+});
+</script>
+
+<%- include('foot') -%>

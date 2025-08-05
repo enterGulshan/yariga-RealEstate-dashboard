@@ -1,0 +1,318 @@
+<%- include('head', { title: 'YARIGA - Agent Details' }) -%>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="d-flex align-items-center p-3 border-bottom">
+      <div class="d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#2563eb" class="bi bi-buildings me-2" viewBox="0 0 16 16">
+          <path d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022Z"/>
+        </svg>
+        <h4 class="mb-0 text-primary fw-bold">Yariga</h4>
+      </div>
+    </div>
+    
+    <div class="p-3">
+      <div class="nav flex-column">
+        <a href="/dashboard" class="nav-link mb-2">
+          <i class="bi bi-grid me-2"></i> Dashboard
+        </a>
+        <a href="/property" class="nav-link mb-2">
+          <i class="bi bi-building me-2"></i> Property
+        </a>
+        <a href="/agent" class="nav-link active mb-2">
+          <i class="bi bi-people me-2"></i> Agent
+        </a>
+        <a href="#" class="nav-link mb-2">
+          <i class="bi bi-star me-2"></i> Review
+        </a>
+        <a href="#" class="nav-link mb-2">
+          <i class="bi bi-chat me-2"></i> Message
+        </a>
+        <a href="#" class="nav-link">
+          <i class="bi bi-person me-2"></i> My Profile
+        </a>
+        <hr class="my-3">
+        <a href="/logout" class="nav-link text-danger">
+          <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
+      <div class="container-fluid px-4">
+        <div class="d-flex align-items-center">
+          <a href="/agent" class="btn btn-light me-3">
+            <i class="bi bi-arrow-left"></i>
+          </a>
+          <h5 class="mb-0 fw-bold">Agent Details</h5>
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="position-relative me-3">
+            <button class="btn btn-light rounded-circle position-relative">
+              <i class="bi bi-bell"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                3
+              </span>
+            </button>
+          </div>
+          <div class="d-flex align-items-center">
+            <img src="https://ui-avatars.com/api/?name=<%= user.name %>&background=random" class="rounded-circle me-2" width="40" height="40">
+            <div>
+              <div class="fw-bold"><%= user.name %></div>
+              <small class="text-muted">Company Manager</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Agent Details Content -->
+    <div class="container-fluid px-4 py-4">
+      <div class="row g-4">
+        <!-- Agent Profile Card -->
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 text-center">
+              <div class="agent-avatar mb-3">
+                <img src="<%= agent.avatar %>" class="rounded-circle shadow-sm" width="120" height="120" alt="<%= agent.fullName %>" style="object-fit: cover;">
+              </div>
+              <h4 class="fw-bold mb-1"><%= agent.fullName %></h4>
+              <p class="text-muted mb-3">Real Estate Agent</p>
+              
+              <div class="d-flex justify-content-center gap-2 mb-3">
+                <span class="badge bg-primary">Active</span>
+                <span class="badge bg-success">Verified</span>
+              </div>
+              
+              <div class="contact-info text-start mb-4">
+                <div class="d-flex align-items-center mb-2">
+                  <i class="bi bi-envelope text-muted me-3"></i>
+                  <span><%= agent.email %></span>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                  <i class="bi bi-telephone text-muted me-3"></i>
+                  <span><%= agent.phone %></span>
+                </div>
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-geo-alt text-muted me-3"></i>
+                  <span><%= agent.serviceArea %></span>
+                </div>
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-calendar text-muted me-3"></i>
+                  <span>Joined <%= agent.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) %></span>
+                </div>
+              </div>
+              
+              <div class="d-grid gap-2">
+                <button class="btn btn-primary">
+                  <i class="bi bi-chat-dots me-2"></i>Message
+                </button>
+                <button class="btn btn-outline-primary">
+                  <i class="bi bi-telephone me-2"></i>Call
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats and Properties -->
+        <div class="col-lg-8">
+          <!-- Performance Stats -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+              <h5 class="card-title mb-4">Performance Statistics</h5>
+              <div class="row g-4">
+                <div class="col-md-3">
+                  <div class="stat-card bg-primary bg-opacity-10 p-3 rounded text-center">
+                    <i class="bi bi-building text-primary" style="font-size: 2rem;"></i>
+                    <h3 class="text-primary fw-bold mt-2"><%= agent.totalListings %></h3>
+                    <p class="text-muted mb-0">Total Properties</p>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="stat-card bg-success bg-opacity-10 p-3 rounded text-center">
+                    <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
+                    <h3 class="text-success fw-bold mt-2"><%= agent.propertiesSold %></h3>
+                    <p class="text-muted mb-0">Properties Sold</p>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="stat-card bg-warning bg-opacity-10 p-3 rounded text-center">
+                    <i class="bi bi-key text-warning" style="font-size: 2rem;"></i>
+                    <h3 class="text-warning fw-bold mt-2"><%= agent.propertiesRent %></h3>
+                    <p class="text-muted mb-0">Properties Rent</p>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="stat-card bg-info bg-opacity-10 p-3 rounded text-center">
+                    <i class="bi bi-star text-info" style="font-size: 2rem;"></i>
+                    <h3 class="text-info fw-bold mt-2"><%= agent.rating.toFixed(1) %></h3>
+                    <p class="text-muted mb-0">Rating</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Agency Information -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+              <h5 class="card-title mb-4">Agency Information</h5>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="info-item mb-3">
+                    <label class="text-muted small">Agency Name</label>
+                    <p class="fw-bold mb-0"><%= agent.agencyName %></p>
+                  </div>
+                  <div class="info-item mb-3">
+                    <label class="text-muted small">License Number</label>
+                    <p class="fw-bold mb-0"><%= agent.licenseNumber %></p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="info-item mb-3">
+                    <label class="text-muted small">Experience</label>
+                    <p class="fw-bold mb-0"><%= agent.experienceYears %> years</p>
+                  </div>
+                  <div class="info-item mb-3">
+                    <label class="text-muted small">Specialization</label>
+                    <div>
+                      <% agent.specializations.forEach(spec => { %>
+                        <span class="badge bg-light text-dark me-1"><%= spec %></span>
+                      <% }); %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bio Section -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+              <h5 class="card-title mb-3">About</h5>
+              <p class="text-muted mb-0"><%= agent.bio %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Properties -->
+      <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="card-title mb-0">Recent Properties</h5>
+            <a href="/property?agent=<%= agent._id %>" class="btn btn-outline-primary btn-sm">View All</a>
+          </div>
+          
+          <!-- Properties would be loaded here with AJAX or server-side -->
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-4">
+              <div class="card border property-card-sm">
+                <div class="property-image-sm">
+                  <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Property">
+                  <div class="property-badge">For Sale</div>
+                </div>
+                <div class="card-body p-3">
+                  <h6 class="card-title mb-2">Modern Villa</h6>
+                  <p class="text-muted small mb-2">New York, NY</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-primary fw-bold">$850,000</span>
+                    <small class="text-muted">2 days ago</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card border property-card-sm">
+                <div class="property-image-sm">
+                  <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Property">
+                  <div class="property-badge bg-warning">For Rent</div>
+                </div>
+                <div class="card-body p-3">
+                  <h6 class="card-title mb-2">Downtown Apartment</h6>
+                  <p class="text-muted small mb-2">Brooklyn, NY</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-primary fw-bold">$3,500/mo</span>
+                    <small class="text-muted">5 days ago</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card border property-card-sm">
+                <div class="property-image-sm">
+                  <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Property">
+                  <div class="property-badge bg-success">Sold</div>
+                </div>
+                <div class="card-body p-3">
+                  <h6 class="card-title mb-2">Family House</h6>
+                  <p class="text-muted small mb-2">Queens, NY</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-success fw-bold">$675,000</span>
+                    <small class="text-muted">1 week ago</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.property-card-sm {
+  transition: transform 0.2s;
+}
+
+.property-card-sm:hover {
+  transform: translateY(-2px);
+}
+
+.property-image-sm {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+}
+
+.property-image-sm img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.property-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #2563eb;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.stat-card {
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.info-item label {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+</style>
+
+<%- include('foot') -%>

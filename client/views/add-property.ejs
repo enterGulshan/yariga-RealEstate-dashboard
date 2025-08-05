@@ -1,0 +1,227 @@
+<%- include('head', { title: 'YARIGA - Add Property' }) -%>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="d-flex align-items-center p-3 border-bottom">
+      <div class="d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#2563eb" class="bi bi-buildings me-2" viewBox="0 0 16 16">
+          <path d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022Z"/>
+        </svg>
+        <h4 class="mb-0 text-primary fw-bold">Yariga</h4>
+      </div>
+    </div>
+    
+    <div class="p-3">
+      <div class="nav flex-column">
+        <a href="/dashboard" class="nav-link mb-2">
+          <i class="bi bi-grid me-2"></i> Dashboard
+        </a>
+        <a href="/property" class="nav-link active mb-2">
+          <i class="bi bi-building me-2"></i> Property
+        </a>
+        <a href="/agent" class="nav-link mb-2">
+          <i class="bi bi-people me-2"></i> Agent
+        </a>
+        <a href="#" class="nav-link mb-2">
+          <i class="bi bi-star me-2"></i> Review
+        </a>
+        <a href="#" class="nav-link mb-2">
+          <i class="bi bi-chat me-2"></i> Message
+        </a>
+        <a href="#" class="nav-link">
+          <i class="bi bi-person me-2"></i> My Profile
+        </a>
+        <hr class="my-3">
+        <a href="/logout" class="nav-link text-danger">
+          <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
+      <div class="container-fluid px-4">
+        <div class="d-flex align-items-center">
+          <a href="/property" class="btn btn-light me-3">
+            <i class="bi bi-arrow-left"></i>
+          </a>
+          <h5 class="mb-0 fw-bold">Add New Property</h5>
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center">
+            <img src="https://ui-avatars.com/api/?name=<%= user.name %>&background=random" class="rounded-circle me-2" width="40" height="40">
+            <div>
+              <div class="fw-bold"><%= user.name %></div>
+              <small class="text-muted">Company Manager</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Add Property Form -->
+    <div class="container-fluid px-4 py-4">
+      <%- message %>
+      
+      <div class="row">
+        <div class="col-lg-8">
+          <form method="POST" action="/property/add">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h6 class="card-title mb-4">Property Information</h6>
+                
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="title" class="form-label">Property Title *</label>
+                    <input type="text" class="form-control" id="title" name="title" required placeholder="Enter property title">
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label for="price" class="form-label">Price *</label>
+                    <div class="input-group">
+                      <span class="input-group-text">$</span>
+                      <input type="number" class="form-control" id="price" name="price" required placeholder="0">
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label for="location" class="form-label">Location *</label>
+                    <input type="text" class="form-control" id="location" name="location" required placeholder="Enter location">
+                  </div>
+                  
+                  <div class="col-md-4">
+                    <label for="beds" class="form-label">Bedrooms *</label>
+                    <input type="number" class="form-control" id="beds" name="beds" required min="1" placeholder="0">
+                  </div>
+                  
+                  <div class="col-md-4">
+                    <label for="area" class="form-label">Area *</label>
+                    <input type="text" class="form-control" id="area" name="area" required placeholder="e.g., 28M">
+                  </div>
+                  
+                  <div class="col-md-4">
+                    <label for="type" class="form-label">Property Type *</label>
+                    <select class="form-select" id="type" name="type" required>
+                      <option value="">Select Type</option>
+                      <option value="Apartment">Apartment</option>
+                      <option value="House">House</option>
+                      <option value="Villa">Villa</option>
+                      <option value="Hotel">Hotel</option>
+                      <option value="Commercial">Commercial</option>
+                    </select>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label for="status" class="form-label">Status *</label>
+                    <select class="form-select" id="status" name="status" required>
+                      <option value="">Select Status</option>
+                      <option value="For Sale">For Sale</option>
+                      <option value="For Rent">For Rent</option>
+                    </select>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <label for="image" class="form-label">Image URL</label>
+                    <input type="url" class="form-control" id="image" name="image" placeholder="https://example.com/image.jpg">
+                  </div>
+                  
+                  <div class="col-12">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter property description"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <a href="/property" class="btn btn-light">Cancel</a>
+              <button type="submit" class="btn btn-primary">Add Property</button>
+            </div>
+          </form>
+        </div>
+        
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title mb-3">Property Preview</h6>
+              <div class="property-preview">
+                <div class="preview-image bg-light rounded" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                  <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                </div>
+                <div class="mt-3">
+                  <h6 class="preview-title text-muted">Property Title</h6>
+                  <p class="preview-location text-muted small">
+                    <i class="bi bi-geo-alt me-1"></i>Location
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="preview-price badge bg-primary">$0</span>
+                    <span class="preview-beds text-muted small">0 Beds</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card border-0 shadow-sm mt-4">
+            <div class="card-body">
+              <h6 class="card-title mb-3">Tips</h6>
+              <ul class="list-unstyled small text-muted">
+                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Use high-quality images</li>
+                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Write detailed descriptions</li>
+                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Set competitive prices</li>
+                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Include accurate location</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Live preview functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const titleInput = document.getElementById('title');
+  const priceInput = document.getElementById('price');
+  const locationInput = document.getElementById('location');
+  const bedsInput = document.getElementById('beds');
+  const imageInput = document.getElementById('image');
+  
+  const previewTitle = document.querySelector('.preview-title');
+  const previewLocation = document.querySelector('.preview-location');
+  const previewPrice = document.querySelector('.preview-price');
+  const previewBeds = document.querySelector('.preview-beds');
+  const previewImage = document.querySelector('.preview-image');
+  
+  titleInput.addEventListener('input', function() {
+    previewTitle.textContent = this.value || 'Property Title';
+  });
+  
+  priceInput.addEventListener('input', function() {
+    previewPrice.textContent = this.value ? `$${parseInt(this.value).toLocaleString()}` : '$0';
+  });
+  
+  locationInput.addEventListener('input', function() {
+    previewLocation.innerHTML = `<i class="bi bi-geo-alt me-1"></i>${this.value || 'Location'}`;
+  });
+  
+  bedsInput.addEventListener('input', function() {
+    previewBeds.textContent = this.value ? `${this.value} Beds` : '0 Beds';
+  });
+  
+  imageInput.addEventListener('input', function() {
+    if (this.value) {
+      previewImage.innerHTML = `<img src="${this.value}" class="w-100 h-100 rounded" style="object-fit: cover;" onerror="this.parentElement.innerHTML='<i class=&quot;bi bi-image text-muted&quot; style=&quot;font-size: 2rem;&quot;></i>'">`;
+    } else {
+      previewImage.innerHTML = '<i class="bi bi-image text-muted" style="font-size: 2rem;"></i>';
+    }
+  });
+});
+</script>
+
+<%- include('foot') -%>

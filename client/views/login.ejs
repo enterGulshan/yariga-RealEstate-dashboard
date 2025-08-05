@@ -1,0 +1,41 @@
+<%- include('head', { title: 'YARIGA - Login' }) -%>
+<div class="login-page">
+<main class="form-signin w-100 m-auto">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="text-center mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="#2563eb" class="bi bi-buildings mb-2" viewBox="0 0 16 16">
+          <path d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022ZM6 8.694 1 10.36V15h5V8.694ZM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15Z"/>
+          <path d="M2 11h1v1H2v-1Zm2 0h1v1H4v-1Zm-2 2h1v1H2v-1Zm2 0h1v1H4v-1Zm4-4h1v1H8V9Zm2 0h1v1h-1V9Zm-2 2h1v1H8v-1Zm2 0h1v1h-1v-1Zm2-2h1v1h-1V9Zm0 2h1v1h-1v-1ZM8 7h1v1H8V7Zm2 0h1v1h-1V7Zm2 0h1v1h-1V7ZM8 5h1v1H8V5Zm2 0h1v1h-1V5Zm2 0h1v1h-1V5Zm0-2h1v1h-1V3Z"/>
+        </svg>
+        <h1 class="h3 mb-3 fw-normal text-primary fw-bold">YARIGA</h1>
+        <p class="text-muted">Real Estate Dashboard</p>
+      </div>
+
+      <%- message %>
+
+      <form method="post" action="/login">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
+          <label for="username">Username</label>
+        </div>
+        
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+          <label for="password">Password</label>
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+      </form>
+      
+      <div class="text-center mt-3">
+        <small class="text-muted">
+          Default credentials: admin / admin123
+        </small>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+
+<%- include('foot') -%>

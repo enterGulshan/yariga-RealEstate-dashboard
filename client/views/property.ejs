@@ -1,0 +1,249 @@
+<%- include('head', { title: 'YARIGA - Properties' }) -%>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="d-flex align-items-center p-3 border-bottom">
+      <div class="d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#2563eb" class="bi bi-buildings me-2" viewBox="0 0 16 16">
+          <path d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022Z"/>
+        </svg>
+        <h4 class="mb-0 text-primary fw-bold">Yariga</h4>
+      </div>
+    </div>
+    
+    <div class="p-3">
+      <div class="nav flex-column">
+        <a href="/dashboard" class="nav-link mb-2">
+          <i class="bi bi-grid me-2"></i> Dashboard
+        </a>
+        <a href="/property" class="nav-link active mb-2">
+          <i class="bi bi-building me-2"></i> Property
+        </a>
+        <a href="/agent" class="nav-link mb-2">
+          <i class="bi bi-people me-2"></i> Agent
+        </a>
+        <a href="#" class="nav-link mb-2">
+          <i class="bi bi-star me-2"></i> Review
+        </a>
+        <a href="#" class="nav-link mb-2">
+          <i class="bi bi-chat me-2"></i> Message
+        </a>
+        <a href="#" class="nav-link">
+          <i class="bi bi-person me-2"></i> My Profile
+        </a>
+        <hr class="my-3">
+        <a href="/logout" class="nav-link text-danger">
+          <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
+      <div class="container-fluid px-4">
+        <h5 class="mb-0 fw-bold">Property List</h5>
+        <div class="d-flex align-items-center">
+          <div class="position-relative me-3">
+            <div class="input-group">
+              <span class="input-group-text border-end-0 bg-transparent">
+                <i class="bi bi-search"></i>
+              </span>
+              <input type="text" class="form-control border-start-0" placeholder="Search Property, Customer etc..." style="width: 300px;" id="searchInput" value="<%= filters.search || '' %>">
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="position-relative me-3">
+              <button class="btn btn-light rounded-circle position-relative">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  3
+                </span>
+              </button>
+            </div>
+            <div class="d-flex align-items-center">
+              <img src="https://ui-avatars.com/api/?name=<%= user.name %>&background=random" class="rounded-circle me-2" width="40" height="40">
+              <div>
+                <div class="fw-bold"><%= user.name %></div>
+                <small class="text-muted">Company Manager</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Property Content -->
+    <div class="container-fluid px-4 py-4">
+      <!-- Header with Add Button -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h4 class="mb-1">Property List</h4>
+          <p class="text-muted mb-0">Showing <%= ((currentPage - 1) * 10) + 1 %> to <%= Math.min(currentPage * 10, totalProperties) %> of <%= totalProperties %> properties</p>
+        </div>
+        <a href="/property/add" class="btn btn-primary">
+          <i class="bi bi-plus-circle me-2"></i>Add Property
+        </a>
+      </div>
+
+      <!-- Filters -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+          <form method="GET" action="/property" class="row g-3">
+            <div class="col-md-3">
+              <input type="text" class="form-control" placeholder="Enter an address, city or Zip code" name="search" value="<%= filters.search || '' %>">
+            </div>
+            <div class="col-md-2">
+              <select class="form-select" name="status">
+                <option value="">Any Status</option>
+                <option value="For Sale" <%= filters.status === 'For Sale' ? 'selected' : '' %>>For Sale</option>
+                <option value="For Rent" <%= filters.status === 'For Rent' ? 'selected' : '' %>>For Rent</option>
+                <option value="Sold" <%= filters.status === 'Sold' ? 'selected' : '' %>>Sold</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select class="form-select" name="type">
+                <option value="">Any Type</option>
+                <option value="Apartment" <%= filters.type === 'Apartment' ? 'selected' : '' %>>Apartment</option>
+                <option value="House" <%= filters.type === 'House' ? 'selected' : '' %>>House</option>
+                <option value="Villa" <%= filters.type === 'Villa' ? 'selected' : '' %>>Villa</option>
+                <option value="Hotel" <%= filters.type === 'Hotel' ? 'selected' : '' %>>Hotel</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select class="form-select" name="location">
+                <option value="">All Countries</option>
+                <option value="USA" <%= filters.location === 'USA' ? 'selected' : '' %>>USA</option>
+                <option value="UK" <%= filters.location === 'UK' ? 'selected' : '' %>>UK</option>
+                <option value="Canada" <%= filters.location === 'Canada' ? 'selected' : '' %>>Canada</option>
+              </select>
+            </div>
+            <div class="col-md-1">
+              <button type="submit" class="btn btn-outline-primary w-100">
+                <i class="bi bi-funnel"></i>
+              </button>
+            </div>
+            <div class="col-md-2">
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
+                  <i class="bi bi-grid me-2"></i>More
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Export</a></li>
+                  <li><a class="dropdown-item" href="#">Import</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                </ul>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Success/Error Messages -->
+      <%- message %>
+
+      <!-- Property Grid -->
+      <div class="row g-4">
+        <% if (properties.length === 0) { %>
+          <div class="col-12">
+            <div class="text-center py-5">
+              <i class="bi bi-building" style="font-size: 4rem; color: #dee2e6;"></i>
+              <h5 class="mt-3 text-muted">No properties found</h5>
+              <p class="text-muted">Try adjusting your search criteria or add a new property.</p>
+              <a href="/property/add" class="btn btn-primary">Add Property</a>
+            </div>
+          </div>
+        <% } else { %>
+          <% properties.forEach(property => { %>
+            <div class="col-lg-6 col-xl-4">
+              <div class="card border-0 shadow-sm h-100 property-card">
+                <div class="position-relative">
+                  <img src="<%= property.image %>" class="card-img-top" alt="<%= property.title %>" style="height: 200px; object-fit: cover;">
+                  <div class="position-absolute top-0 start-0 m-3">
+                    <span class="badge bg-primary">$<%= property.price.toLocaleString() %></span>
+                  </div>
+                  <div class="position-absolute top-0 end-0 m-3">
+                    <div class="dropdown">
+                      <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>View</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Edit</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                          <form method="POST" action="/property/delete/<%= property._id %>" style="display: inline;">
+                            <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this property?')">
+                              <i class="bi bi-trash me-2"></i>Delete
+                            </button>
+                          </form>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <h6 class="card-title mb-2"><%= property.title %></h6>
+                  <p class="text-muted small mb-2">
+                    <i class="bi bi-geo-alt me-1"></i><%= property.location %>
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center small text-muted">
+                      <span class="me-3">
+                        <i class="bi bi-house-door me-1"></i><%= property.beds %> Beds
+                      </span>
+                      <span>
+                        <i class="bi bi-arrows-angle-expand me-1"></i><%= property.area %>
+                      </span>
+                    </div>
+                    <span class="badge bg-<%= property.status === 'For Sale' ? 'success' : property.status === 'For Rent' ? 'warning' : 'secondary' %>">
+                      <%= property.status %>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+
+      <!-- Pagination -->
+      <% if (totalPages > 1) { %>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <p class="text-muted mb-0">Showing <%= ((currentPage - 1) * 10) + 1 %> to <%= Math.min(currentPage * 10, totalProperties) %> Properties</p>
+          <nav>
+            <ul class="pagination mb-0">
+              <% if (currentPage > 1) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage - 1 %>&search=<%= filters.search || '' %>&status=<%= filters.status || '' %>&type=<%= filters.type || '' %>&location=<%= filters.location || '' %>">
+                    <i class="bi bi-chevron-left"></i>
+                  </a>
+                </li>
+              <% } %>
+              
+              <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                  <a class="page-link" href="?page=<%= i %>&search=<%= filters.search || '' %>&status=<%= filters.status || '' %>&type=<%= filters.type || '' %>&location=<%= filters.location || '' %>"><%= i %></a>
+                </li>
+              <% } %>
+              
+              <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage + 1 %>&search=<%= filters.search || '' %>&status=<%= filters.status || '' %>&type=<%= filters.type || '' %>&location=<%= filters.location || '' %>">
+                    <i class="bi bi-chevron-right"></i>
+                  </a>
+                </li>
+              <% } %>
+            </ul>
+          </nav>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('foot') -%>
