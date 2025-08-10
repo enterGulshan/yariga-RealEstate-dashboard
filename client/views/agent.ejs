@@ -23,13 +23,13 @@
         <a href="/agent" class="nav-link active mb-2">
           <i class="bi bi-people me-2"></i> Agent
         </a>
-        <a href="#" class="nav-link mb-2">
+        <a href="/review" class="nav-link mb-2">
           <i class="bi bi-star me-2"></i> Review
         </a>
-        <a href="#" class="nav-link mb-2">
+        <a href="/message" class="nav-link mb-2">
           <i class="bi bi-chat me-2"></i> Message
         </a>
-        <a href="#" class="nav-link">
+        <a href="/profile" class="nav-link">
           <i class="bi bi-person me-2"></i> My Profile
         </a>
         <hr class="my-3">
@@ -56,6 +56,11 @@
             </div>
           </div>
           <div class="d-flex align-items-center">
+            <!-- Dark/Light Mode Toggle -->
+            <button class="btn btn-light rounded-circle me-3" id="darkModeToggle" title="Toggle Dark Mode">
+              <i class="bi bi-moon-fill" id="darkModeIcon"></i>
+            </button>
+            <!-- Notification -->
             <div class="position-relative me-3">
               <button class="btn btn-light rounded-circle position-relative">
                 <i class="bi bi-bell"></i>
@@ -90,7 +95,7 @@
       </div>
 
       <!-- Success/Error Messages -->
-      <%- message %>
+      <%- include('messages') %>
 
       <!-- Agents Grid -->
       <div class="row g-4">
@@ -119,12 +124,12 @@
                       </div>
                     </div>
                     <div class="dropdown">
-                      <button class="btn btn-sm btn-light rounded-circle" type="button" data-bs-toggle="dropdown">
+                      <button class="btn btn-sm btn-light rounded-circle dropdown-toggle-no-arrow" type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
                         <i class="bi bi-three-dots-vertical"></i>
                       </button>
-                      <ul class="dropdown-menu">
+                      <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                         <li><a class="dropdown-item" href="/agent/<%= agent._id %>"><i class="bi bi-eye me-2"></i>View Details</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Edit</a></li>
+                        <li><a class="dropdown-item" href="/agent/edit/<%= agent._id %>"><i class="bi bi-pencil me-2"></i>Edit</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                           <form method="POST" action="/agent/delete/<%= agent._id %>" style="display: inline;">
@@ -209,5 +214,114 @@
     </div>
   </div>
 </div>
+
+<style>
+/* Optimize dropdown performance */
+.dropdown-toggle-no-arrow::after {
+  display: none;
+}
+
+.dropdown-menu {
+  min-width: 160px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropdown-menu:not(.show) {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Improve agent card hover effects */
+.agent-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.agent-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+/* Loading state for dropdowns */
+.dropdown-toggle:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+}
+</style>
+
+<script>
+// Dark Mode Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const darkModeIcon = document.getElementById('darkModeIcon');
+  const body = document.body;
+
+  // Check for saved dark mode preference or default to light mode
+  const isDarkMode = localStorage.getItem('darkMode') === 'true';
+  
+  // Apply the saved preference
+  if (isDarkMode) {
+    body.classList.add('dark-mode');
+    darkModeIcon.className = 'bi bi-sun-fill';
+  }
+
+  // Toggle dark mode
+  darkModeToggle.addEventListener('click', function() {
+    body.classList.toggle('dark-mode');
+    const isNowDark = body.classList.contains('dark-mode');
+    
+    // Update icon
+    darkModeIcon.className = isNowDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+    
+    // Save preference
+    localStorage.setItem('darkMode', isNowDark);
+  });
+});
+
+// Search functionality
+document.getElementById('searchInput').addEventListener('input', function() {
+  const searchValue = this.value;
+  if (searchValue.length === 0 || searchValue.length >= 2) {
+    window.location.href = `?search=${encodeURIComponent(searchValue)}`;
+  }
+});
+
+// Optimize dropdown performance
+document.addEventListener('DOMContentLoaded', function() {
+  // Pre-initialize dropdowns for better performance
+  const dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+  dropdowns.forEach(dropdown => {
+    // Add event listeners for faster response
+    dropdown.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+    
+    // Preload dropdown content on hover
+    dropdown.addEventListener('mouseenter', function() {
+      if (!this.getAttribute('aria-expanded') || this.getAttribute('aria-expanded') === 'false') {
+        // Prepare dropdown for faster opening
+        this.focus();
+      }
+    });
+  });
+  
+  // Add smooth transitions
+  const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+  dropdownMenus.forEach(menu => {
+    menu.addEventListener('show.bs.dropdown', function() {
+      this.style.opacity = '0';
+      this.style.transform = 'translateY(-10px)';
+      setTimeout(() => {
+        this.style.opacity = '1';
+        this.style.transform = 'translateY(0)';
+      }, 10);
+    });
+  });
+});
+</script>
 
 <%- include('foot') -%>

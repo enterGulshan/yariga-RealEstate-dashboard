@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Property = require('../models/Property');
+const { uploadProperty, getPropertyImage } = require('../middleware/upload');
 
 // Property list page
 router.get('/property', async (req, res) => {
@@ -58,13 +59,23 @@ router.get('/property/add', (req, res) => {
 });
 
 // Handle add property form submission
-router.post('/property/add', async (req, res) => {
+router.post('/property/add', uploadProperty.single('propertyImage'), async (req, res) => {
   try {
     if (!req.session.user) {
       return res.redirect('/login');
     }
 
     const { title, price, location, beds, area, type, status, description, image } = req.body;
+
+    // Handle image upload
+    let imageUrl;
+    if (req.file) {
+      imageUrl = `/images/uploads/properties/${req.file.filename}`;
+    } else if (image) {
+      imageUrl = image;
+    } else {
+      imageUrl = getPropertyImage(null, title);
+    }
 
     const newProperty = new Property({
       title,
@@ -75,7 +86,7 @@ router.post('/property/add', async (req, res) => {
       type,
       status,
       description,
-      image: image || 'https://source.unsplash.com/800x600/?building'
+      image: imageUrl
     });
 
     await newProperty.save();

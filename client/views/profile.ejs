@@ -1,0 +1,309 @@
+<%- include('head', { title: 'YARIGA - My Profile' }) -%>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="d-flex align-items-center p-3 border-bottom">
+      <div class="d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#2563eb" class="bi bi-buildings me-2" viewBox="0 0 16 16">
+          <path d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022Z"/>
+        </svg>
+        <h4 class="mb-0 text-primary fw-bold">Yariga</h4>
+      </div>
+    </div>
+    
+    <div class="p-3">
+      <div class="nav flex-column">
+        <a href="/dashboard" class="nav-link mb-2">
+          <i class="bi bi-grid me-2"></i> Dashboard
+        </a>
+        <a href="/property" class="nav-link mb-2">
+          <i class="bi bi-building me-2"></i> Property
+        </a>
+        <a href="/agent" class="nav-link mb-2">
+          <i class="bi bi-people me-2"></i> Agent
+        </a>
+        <a href="/review" class="nav-link mb-2">
+          <i class="bi bi-star me-2"></i> Review
+        </a>
+        <a href="/message" class="nav-link mb-2">
+          <i class="bi bi-chat me-2"></i> Message
+        </a>
+        <a href="/profile" class="nav-link active">
+          <i class="bi bi-person me-2"></i> My Profile
+        </a>
+        <hr class="my-3">
+        <a href="/logout" class="nav-link text-danger">
+          <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
+      <div class="container-fluid px-4">
+        <h5 class="mb-0 fw-bold">My Profile</h5>
+        <div class="d-flex align-items-center">
+          <div class="position-relative me-3">
+            <div class="input-group">
+              <span class="input-group-text border-end-0 bg-transparent">
+                <i class="bi bi-search"></i>
+              </span>
+              <input type="text" class="form-control border-start-0" placeholder="Search Property, Customer etc..." style="width: 300px;">
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <!-- Dark/Light Mode Toggle -->
+            <button class="btn btn-light rounded-circle me-3" id="darkModeToggle" title="Toggle Dark Mode">
+              <i class="bi bi-moon-fill" id="darkModeIcon"></i>
+            </button>
+            <!-- Notification -->
+            <div class="position-relative me-3">
+              <button class="btn btn-light rounded-circle position-relative">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  3
+                </span>
+              </button>
+            </div>
+            <div class="d-flex align-items-center">
+              <img src="<%= profileUser.profilePicture %>" class="rounded-circle me-2" width="40" height="40">
+              <div>
+                <div class="fw-bold"><%= user.name %></div>
+                <small class="text-muted">Company Manager</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Profile Content -->
+    <div class="container-fluid px-4 py-4">
+      <!-- Success/Error Messages -->
+      <%- message %>
+
+      <div class="row">
+        <!-- Profile Card -->
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <div class="card-body text-center position-relative">
+              <!-- Profile Background -->
+              <div class="profile-bg rounded-3 mb-3" style="height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position: relative;">
+                <div class="position-absolute bottom-0 start-50 translate-middle-x" style="transform: translateY(50%) translateX(-50%);">
+                  <div class="position-relative">
+                    <img src="<%= profileUser.profilePicture %>" class="rounded-circle border border-4 border-white" width="100" height="100" style="object-fit: cover;">
+                    <button class="btn btn-sm btn-primary rounded-circle position-absolute" 
+                            style="bottom: 5px; right: 5px; width: 30px; height: 30px; padding: 0;"
+                            data-bs-toggle="modal" data-bs-target="#changePhotoModal">
+                      <i class="bi bi-camera-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Profile Info -->
+              <div style="margin-top: 60px;">
+                <h4 class="mb-1">Mr. <%= profileUser.name %></h4>
+                <p class="text-muted mb-3"><%= profileUser.role.charAt(0).toUpperCase() + profileUser.role.slice(1) %></p>
+
+                <div class="text-start">
+                  <div class="mb-3">
+                    <h6 class="text-muted mb-1">Address</h6>
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-geo-alt me-2 text-muted"></i>
+                      <span><%= profileUser.address || '4517 Washington Ave, Manchester, Kentucky 39495' %></span>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <h6 class="text-muted mb-1">Phone Number</h6>
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-telephone me-2 text-muted"></i>
+                      <span><%= profileUser.phone || '+0123 456 7890' %></span>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <h6 class="text-muted mb-1">Email</h6>
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-envelope me-2 text-muted"></i>
+                      <span><%= profileUser.email || 'alvert@e@gmail.com' %></span>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                  <i class="bi bi-pencil me-2"></i>Edit Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Property List -->
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header bg-white">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Property List</h5>
+                <div>
+                  <button class="btn btn-sm btn-primary me-2">Popular</button>
+                  <button class="btn btn-sm btn-outline-secondary me-2">Recommended</button>
+                  <button class="btn btn-sm btn-outline-secondary me-2">Newest</button>
+                  <button class="btn btn-sm btn-outline-secondary">Most Recent</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row g-4">
+                <% if (properties.length === 0) { %>
+                  <div class="col-12">
+                    <div class="text-center py-5">
+                      <i class="bi bi-building" style="font-size: 4rem; color: #dee2e6;"></i>
+                      <h5 class="mt-3 text-muted">No properties found</h5>
+                      <p class="text-muted">You haven't added any properties yet.</p>
+                      <a href="/property/add" class="btn btn-primary">Add Property</a>
+                    </div>
+                  </div>
+                <% } else { %>
+                  <% properties.forEach(property => { %>
+                    <div class="col-lg-4">
+                      <div class="card border-0 shadow-sm h-100">
+                        <img src="<%= property.image %>" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                          <h6 class="card-title mb-2"><%= property.title %></h6>
+                          <p class="text-muted small mb-2">
+                            <i class="bi bi-geo-alt me-1"></i><%= property.location %>
+                          </p>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <span class="h5 text-primary mb-0">$<%= property.price.toLocaleString() %></span>
+                            <span class="badge bg-<%= property.status === 'For Sale' ? 'success' : property.status === 'For Rent' ? 'primary' : 'secondary' %>">
+                              <%= property.status %>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% }); %>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="/profile/update">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="<%= profileUser.name %>" required>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="<%= profileUser.email || '' %>">
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="phone" name="phone" value="<%= profileUser.phone || '' %>">
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <textarea class="form-control" id="address" name="address" rows="3"><%= profileUser.address || '' %></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Change Photo Modal -->
+<div class="modal fade" id="changePhotoModal" tabindex="-1" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePhotoModalLabel">Change Profile Photo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="/profile/photo">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="photoUrl" class="form-label">Photo URL</label>
+            <input type="url" class="form-control" id="photoUrl" name="photoUrl" placeholder="https://example.com/photo.jpg">
+            <div class="form-text">Enter a direct link to your profile photo, or leave empty to use auto-generated avatar.</div>
+          </div>
+          <div class="text-center">
+            <img id="photoPreview" src="<%= profileUser.profilePicture %>" class="rounded-circle" width="100" height="100" style="object-fit: cover;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Photo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+// Dark Mode Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const darkModeIcon = document.getElementById('darkModeIcon');
+  const body = document.body;
+
+  // Check for saved dark mode preference or default to light mode
+  const isDarkMode = localStorage.getItem('darkMode') === 'true';
+  
+  // Apply the saved preference
+  if (isDarkMode) {
+    body.classList.add('dark-mode');
+    darkModeIcon.className = 'bi bi-sun-fill';
+  }
+
+  // Toggle dark mode
+  darkModeToggle.addEventListener('click', function() {
+    body.classList.toggle('dark-mode');
+    const isNowDark = body.classList.contains('dark-mode');
+    
+    // Update icon
+    darkModeIcon.className = isNowDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+    
+    // Save preference
+    localStorage.setItem('darkMode', isNowDark);
+  });
+
+  // Photo preview functionality
+  const photoUrlInput = document.getElementById('photoUrl');
+  const photoPreview = document.getElementById('photoPreview');
+
+  photoUrlInput.addEventListener('input', function() {
+    const url = this.value;
+    if (url) {
+      photoPreview.src = url;
+    } else {
+      photoPreview.src = '<%= profileUser.profilePicture %>';
+    }
+  });
+});
+</script>
+
+<%- include('foot') -%>

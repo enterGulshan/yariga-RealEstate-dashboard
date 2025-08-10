@@ -23,7 +23,19 @@ const propertySchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: true
+    required: true,
+    default: function() {
+      // Generate a property image based on type
+      const propertyTypes = {
+        'Apartment': 'apartment',
+        'House': 'modern-house',
+        'Villa': 'luxury-villa',
+        'Hotel': 'luxury-hotel',
+        'Commercial': 'office-building'
+      };
+      const keyword = propertyTypes[this.type] || 'modern-house';
+      return `https://source.unsplash.com/800x600/?${keyword}`;
+    }
   },
   status: {
     type: String,

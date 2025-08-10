@@ -23,13 +23,13 @@
         <a href="/agent" class="nav-link mb-2">
           <i class="bi bi-people me-2"></i> Agent
         </a>
-        <a href="#" class="nav-link mb-2">
+        <a href="/review" class="nav-link mb-2">
           <i class="bi bi-star me-2"></i> Review
         </a>
-        <a href="#" class="nav-link mb-2">
+        <a href="/message" class="nav-link mb-2">
           <i class="bi bi-chat me-2"></i> Message
         </a>
-        <a href="#" class="nav-link">
+        <a href="/profile" class="nav-link">
           <i class="bi bi-person me-2"></i> My Profile
         </a>
         <hr class="my-3">
@@ -56,6 +56,11 @@
             </div>
           </div>
           <div class="d-flex align-items-center">
+            <!-- Dark/Light Mode Toggle -->
+            <button class="btn btn-light rounded-circle me-3" id="darkModeToggle" title="Toggle Dark Mode">
+              <i class="bi bi-moon-fill" id="darkModeIcon"></i>
+            </button>
+            <!-- Notification -->
             <div class="position-relative me-3">
               <button class="btn btn-light rounded-circle position-relative">
                 <i class="bi bi-bell"></i>
@@ -245,5 +250,51 @@
     </div>
   </div>
 </div>
+
+<script>
+// Dark Mode Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const darkModeIcon = document.getElementById('darkModeIcon');
+  const body = document.body;
+
+  // Check for saved dark mode preference or default to light mode
+  const isDarkMode = localStorage.getItem('darkMode') === 'true';
+  
+  // Apply the saved preference
+  if (isDarkMode) {
+    body.classList.add('dark-mode');
+    darkModeIcon.className = 'bi bi-sun-fill';
+  }
+
+  // Toggle dark mode
+  darkModeToggle.addEventListener('click', function() {
+    body.classList.toggle('dark-mode');
+    const isNowDark = body.classList.contains('dark-mode');
+    
+    // Update icon
+    darkModeIcon.className = isNowDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+    
+    // Save preference
+    localStorage.setItem('darkMode', isNowDark);
+  });
+});
+
+// Search functionality
+document.getElementById('searchInput').addEventListener('input', function() {
+  const searchValue = this.value;
+  if (searchValue.length === 0 || searchValue.length >= 2) {
+    // Build current filter parameters
+    const currentParams = new URLSearchParams(window.location.search);
+    if (searchValue) {
+      currentParams.set('search', searchValue);
+    } else {
+      currentParams.delete('search');
+    }
+    currentParams.delete('page'); // Reset to first page when searching
+    window.location.href = `${window.location.pathname}?${currentParams.toString()}`;
+  }
+});
+</script>
 
 <%- include('foot') -%>

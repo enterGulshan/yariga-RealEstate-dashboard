@@ -1,0 +1,320 @@
+<%- include('head', { title: 'YARIGA - Messages' }) -%>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="d-flex align-items-center p-3 border-bottom">
+      <div class="d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#2563eb" class="bi bi-buildings me-2" viewBox="0 0 16 16">
+          <path d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022Z"/>
+        </svg>
+        <h4 class="mb-0 text-primary fw-bold">Yariga</h4>
+      </div>
+    </div>
+    
+    <div class="p-3">
+      <div class="nav flex-column">
+        <a href="/dashboard" class="nav-link mb-2">
+          <i class="bi bi-grid me-2"></i> Dashboard
+        </a>
+        <a href="/property" class="nav-link mb-2">
+          <i class="bi bi-building me-2"></i> Property
+        </a>
+        <a href="/agent" class="nav-link mb-2">
+          <i class="bi bi-people me-2"></i> Agent
+        </a>
+        <a href="/review" class="nav-link mb-2">
+          <i class="bi bi-star me-2"></i> Review
+        </a>
+        <a href="/message" class="nav-link active mb-2">
+          <i class="bi bi-chat me-2"></i> Message
+        </a>
+        <a href="/profile" class="nav-link">
+          <i class="bi bi-person me-2"></i> My Profile
+        </a>
+        <hr class="my-3">
+        <a href="/logout" class="nav-link text-danger">
+          <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
+      <div class="container-fluid px-4">
+        <h5 class="mb-0 fw-bold">Messages</h5>
+        <div class="d-flex align-items-center">
+          <div class="position-relative me-3">
+            <div class="input-group">
+              <span class="input-group-text border-end-0 bg-transparent">
+                <i class="bi bi-search"></i>
+              </span>
+              <input type="text" class="form-control border-start-0" placeholder="Search Property, Customer etc..." style="width: 300px;">
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <!-- Dark/Light Mode Toggle -->
+            <button class="btn btn-light rounded-circle me-3" id="darkModeToggle" title="Toggle Dark Mode">
+              <i class="bi bi-moon-fill" id="darkModeIcon"></i>
+            </button>
+            <!-- Notification -->
+            <div class="position-relative me-3">
+              <button class="btn btn-light rounded-circle position-relative">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  3
+                </span>
+              </button>
+            </div>
+            <div class="d-flex align-items-center">
+              <img src="https://ui-avatars.com/api/?name=<%= user.name %>&background=random" class="rounded-circle me-2" width="40" height="40">
+              <div>
+                <div class="fw-bold"><%= user.name %></div>
+                <small class="text-muted">Company Manager</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Message Content -->
+    <div class="container-fluid px-4 py-4">
+      <div class="card border-primary" style="border: 2px solid #007bff; height: calc(100vh - 180px);">
+        <div class="card-header bg-white">
+          <h4 class="mb-0 text-primary fw-bold">Messages</h4>
+        </div>
+        
+        <div class="card-body p-0 d-flex" style="height: 100%;">
+          <!-- Conversations List -->
+          <div class="border-end" style="width: 350px; height: 100%;">
+            <!-- Search Bar -->
+            <div class="p-3 border-bottom">
+              <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control border-start-0" placeholder="Search">
+                <button class="btn btn-outline-secondary" type="button">
+                  <i class="bi bi-funnel"></i> All
+                </button>
+              </div>
+            </div>
+
+            <!-- Conversation List -->
+            <div class="conversation-list" style="height: calc(100% - 80px); overflow-y: auto;">
+              <% if (users.length === 0) { %>
+                <div class="text-center py-4">
+                  <i class="bi bi-chat" style="font-size: 3rem; color: #dee2e6;"></i>
+                  <p class="text-muted mt-2">No conversations yet</p>
+                </div>
+              <% } else { %>
+                <% users.forEach(function(contact) { %>
+                  <a href="/message?userId=<%= contact._id %>" class="conversation-item d-block text-decoration-none <%= contact.isActive ? 'active' : '' %>">
+                    <div class="d-flex align-items-center p-3 border-bottom conversation-hover">
+                      <img src="<%= contact.profilePicture %>" class="rounded-circle me-3" width="45" height="45" alt="<%= contact.name %>">
+                      <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <div>
+                            <div class="fw-bold text-dark"><%= contact.name %></div>
+                            <div class="text-muted small text-truncate" style="max-width: 200px;">
+                              <%= contact.lastMessage %>
+                            </div>
+                          </div>
+                          <div class="text-end">
+                            <small class="text-muted"><%= contact.lastMessageTime %></small>
+                            <div class="text-muted small">Active Now</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                <% }); %>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Chat Area -->
+          <div class="flex-grow-1 d-flex flex-column">
+            <% if (selectedUser) { %>
+              <!-- Chat Header -->
+              <div class="chat-header p-3 border-bottom bg-light">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center">
+                    <img src="<%= selectedUser.profilePicture %>" class="rounded-circle me-3" width="40" height="40" alt="<%= selectedUser.name %>">
+                    <div>
+                      <div class="fw-bold"><%= selectedUser.name %></div>
+                      <small class="text-success">Active Now</small>
+                    </div>
+                  </div>
+                  <div class="d-flex">
+                    <button class="btn btn-light me-2">
+                      <i class="bi bi-telephone"></i>
+                    </button>
+                    <button class="btn btn-light me-2">
+                      <i class="bi bi-camera-video"></i>
+                    </button>
+                    <button class="btn btn-light">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Messages Area -->
+              <div class="messages-area flex-grow-1 p-3" style="overflow-y: auto; max-height: calc(100vh - 350px);">
+                <% if (messages.length === 0) { %>
+                  <div class="text-center py-5">
+                    <i class="bi bi-chat-dots" style="font-size: 3rem; color: #dee2e6;"></i>
+                    <p class="text-muted mt-2">No messages yet. Start the conversation!</p>
+                  </div>
+                <% } else { %>
+                  <% messages.forEach(function(message) { %>
+                    <% const isOwn = message.senderId.toString() === user.id %>
+                    <div class="message-item mb-3 <%= isOwn ? 'text-end' : '' %>">
+                      <div class="d-flex <%= isOwn ? 'justify-content-end' : '' %>">
+                        <% if (!isOwn) { %>
+                          <img src="<%= message.senderAvatar %>" class="rounded-circle me-2" width="32" height="32" alt="<%= message.senderName %>">
+                        <% } %>
+                        <div class="message-bubble <%= isOwn ? 'bg-primary text-white' : 'bg-light' %>" style="max-width: 70%; padding: 10px 15px; border-radius: 18px;">
+                          <div><%= message.content %></div>
+                          <% if (message.images && message.images.length > 0) { %>
+                            <div class="mt-2">
+                              <% message.images.forEach(function(image) { %>
+                                <img src="<%= image %>" class="img-fluid rounded" style="max-width: 200px;">
+                              <% }); %>
+                            </div>
+                          <% } %>
+                        </div>
+                        <% if (isOwn) { %>
+                          <img src="<%= user.profilePicture || 'https://ui-avatars.com/api/?name=' + user.name %>" class="rounded-circle ms-2" width="32" height="32" alt="<%= user.name %>">
+                        <% } %>
+                      </div>
+                      <div class="<%= isOwn ? 'text-end' : '' %> mt-1">
+                        <small class="text-muted"><%= message.formattedTime %></small>
+                      </div>
+                    </div>
+                  <% }); %>
+                <% } %>
+              </div>
+
+              <!-- Message Input -->
+              <div class="message-input p-3 border-top">
+                <form action="/message/send" method="POST" class="d-flex align-items-center">
+                  <input type="hidden" name="receiverId" value="<%= selectedUser._id %>">
+                  <button type="button" class="btn btn-light me-2">
+                    <i class="bi bi-paperclip"></i>
+                  </button>
+                  <button type="button" class="btn btn-light me-2">
+                    <i class="bi bi-emoji-smile"></i>
+                  </button>
+                  <div class="flex-grow-1 me-2">
+                    <input type="text" name="content" class="form-control" placeholder="Write a message down here" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-send"></i>
+                  </button>
+                </form>
+              </div>
+            <% } else { %>
+              <!-- No Conversation Selected -->
+              <div class="d-flex align-items-center justify-content-center h-100">
+                <div class="text-center">
+                  <i class="bi bi-chat-square-dots" style="font-size: 4rem; color: #dee2e6;"></i>
+                  <h5 class="mt-3 text-muted">Select a conversation to start messaging</h5>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.conversation-item.active .conversation-hover {
+  background-color: #e3f2fd !important;
+}
+
+.conversation-hover:hover {
+  background-color: #f8f9fa;
+}
+
+.conversation-item.active .conversation-hover:hover {
+  background-color: #e3f2fd !important;
+}
+
+.message-bubble {
+  word-wrap: break-word;
+}
+
+.messages-area {
+  scroll-behavior: smooth;
+}
+
+/* Dark mode styles for messages */
+.dark-mode .conversation-hover:hover {
+  background-color: #3a3b3c !important;
+}
+
+.dark-mode .conversation-item.active .conversation-hover {
+  background-color: #1e3a5f !important;
+}
+
+.dark-mode .chat-header {
+  background-color: #242529 !important;
+}
+
+.dark-mode .message-bubble.bg-light {
+  background-color: #3a3b3c !important;
+  color: #e4e6ea !important;
+}
+</style>
+
+<script>
+// Dark Mode Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const darkModeIcon = document.getElementById('darkModeIcon');
+  const body = document.body;
+
+  // Check for saved dark mode preference or default to light mode
+  const isDarkMode = localStorage.getItem('darkMode') === 'true';
+  
+  // Apply the saved preference
+  if (isDarkMode) {
+    body.classList.add('dark-mode');
+    darkModeIcon.className = 'bi bi-sun-fill';
+  }
+
+  // Toggle dark mode
+  darkModeToggle.addEventListener('click', function() {
+    body.classList.toggle('dark-mode');
+    const isNowDark = body.classList.contains('dark-mode');
+    
+    // Update icon
+    darkModeIcon.className = isNowDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+    
+    // Save preference
+    localStorage.setItem('darkMode', isNowDark);
+  });
+
+  // Auto-scroll to bottom of messages
+  const messagesArea = document.querySelector('.messages-area');
+  if (messagesArea) {
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+  }
+
+  // Auto-focus message input
+  const messageInput = document.querySelector('input[name="content"]');
+  if (messageInput) {
+    messageInput.focus();
+  }
+});
+</script>
+
+<%- include('foot') -%>

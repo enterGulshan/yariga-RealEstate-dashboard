@@ -23,13 +23,13 @@
         <a href="/agent" class="nav-link mb-2">
           <i class="bi bi-people me-2"></i> Agent
         </a>
-        <a href="#" class="nav-link mb-2">
+        <a href="/review" class="nav-link mb-2">
           <i class="bi bi-star me-2"></i> Review
         </a>
-        <a href="#" class="nav-link mb-2">
+        <a href="/message" class="nav-link mb-2">
           <i class="bi bi-chat me-2"></i> Message
         </a>
-        <a href="#" class="nav-link">
+        <a href="/profile" class="nav-link">
           <i class="bi bi-person me-2"></i> My Profile
         </a>
         <hr class="my-3">
@@ -56,6 +56,11 @@
             </div>
           </div>
           <div class="d-flex align-items-center">
+            <!-- Dark/Light Mode Toggle -->
+            <button class="btn btn-light rounded-circle me-3" id="darkModeToggle" title="Toggle Dark Mode">
+              <i class="bi bi-moon-fill" id="darkModeIcon"></i>
+            </button>
+            <!-- Notification -->
             <div class="position-relative me-3">
               <button class="btn btn-light rounded-circle position-relative">
                 <i class="bi bi-bell"></i>
@@ -86,7 +91,7 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div>
                   <h6 class="text-muted mb-2">Properties for Sale</h6>
-                  <h3 class="mb-0">684</h3>
+                  <h3 class="mb-0"><%= stats.propertiesForSale %></h3>
                 </div>
                 <div class="rounded-circle bg-primary bg-opacity-10 p-3">
                   <div class="text-primary">
@@ -103,7 +108,7 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div>
                   <h6 class="text-muted mb-2">Properties for Rent</h6>
-                  <h3 class="mb-0">546</h3>
+                  <h3 class="mb-0"><%= stats.propertiesForRent %></h3>
                 </div>
                 <div class="rounded-circle bg-warning bg-opacity-10 p-3">
                   <div class="text-warning">
@@ -119,12 +124,12 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h6 class="text-muted mb-2">Total Customers</h6>
-                  <h3 class="mb-0">5,732</h3>
+                  <h6 class="text-muted mb-2">Total Agents</h6>
+                  <h3 class="mb-0"><%= stats.totalAgents %></h3>
                 </div>
-                <div class="rounded-circle bg-success bg-opacity-10 p-3">
-                  <div class="text-success">
-                    <i class="bi bi-people fs-4"></i>
+                <div class="rounded-circle bg-warning bg-opacity-10 p-3">
+                  <div class="text-warning">
+                    <i class="bi bi-person-badge fs-4"></i>
                   </div>
                 </div>
               </div>
@@ -136,12 +141,12 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h6 class="text-muted mb-2">Total Cities</h6>
-                  <h3 class="mb-0">90</h3>
+                  <h6 class="text-muted mb-2">Properties Sold</h6>
+                  <h3 class="mb-0"><%= stats.soldProperties %></h3>
                 </div>
                 <div class="rounded-circle bg-info bg-opacity-10 p-3">
                   <div class="text-info">
-                    <i class="bi bi-geo-alt fs-4"></i>
+                    <i class="bi bi-check-circle fs-4"></i>
                   </div>
                 </div>
               </div>
@@ -159,23 +164,21 @@
                 <div>
                   <h5 class="card-title mb-1">Total Revenue</h5>
                   <div class="d-flex align-items-center">
-                    <h3 class="mb-0">$236,535</h3>
-                    <span class="badge bg-success ms-2">0.8% <i class="bi bi-arrow-up"></i></span>
+                    <h3 class="mb-0" id="revenue-title">$<%= (stats.monthlyRevenue.reduce((a, b) => a + b, 0)).toLocaleString() %></h3>
+                    <span class="badge <%= stats.revenueGrowth >= 0 ? 'bg-success' : 'bg-danger' %> ms-2" id="revenue-change">
+                      <%= Math.abs(stats.revenueGrowth) %>% 
+                      <i class="bi bi-arrow-<%= stats.revenueGrowth >= 0 ? 'up' : 'down' %>"></i>
+                    </span>
                   </div>
                 </div>
                 <div class="btn-group">
-                  <button class="btn btn-outline-secondary btn-sm">1W</button>
-                  <button class="btn btn-outline-secondary btn-sm active">1M</button>
-                  <button class="btn btn-outline-secondary btn-sm">1Y</button>
+                  <button class="btn btn-outline-secondary btn-sm" id="btn-1w">1W</button>
+                  <button class="btn btn-outline-secondary btn-sm active" id="btn-1m">1M</button>
+                  <button class="btn btn-outline-secondary btn-sm" id="btn-1y">1Y</button>
                 </div>
               </div>
-              <div class="chart-placeholder bg-light rounded" style="height: 300px;">
-                <div class="d-flex align-items-center justify-content-center h-100">
-                  <div class="text-center">
-                    <i class="bi bi-bar-chart fs-1 text-muted"></i>
-                    <p class="text-muted mt-2">Chart goes here</p>
-                  </div>
-                </div>
+              <div style="height: 300px;">
+                <canvas id="revenueChart"></canvas>
               </div>
             </div>
           </div>
@@ -184,49 +187,35 @@
           <div class="card border-0 shadow-sm">
             <div class="card-body">
               <h5 class="card-title mb-4">Property Referrals</h5>
-              <div class="mb-4">
-                <div class="d-flex justify-content-between mb-1">
-                  <span>Social Media</span>
-                  <span>64%</span>
-                </div>
-                <div class="progress" style="height: 6px;">
-                  <div class="progress-bar bg-primary" style="width: 64%"></div>
-                </div>
+              <div style="height: 250px; position: relative;">
+                <canvas id="referralsChart"></canvas>
               </div>
-              <div class="mb-4">
-                <div class="d-flex justify-content-between mb-1">
-                  <span>Marketplaces</span>
-                  <span>40%</span>
-                </div>
-                <div class="progress" style="height: 6px;">
-                  <div class="progress-bar bg-success" style="width: 40%"></div>
-                </div>
-              </div>
-              <div class="mb-4">
-                <div class="d-flex justify-content-between mb-1">
-                  <span>Websites</span>
-                  <span>50%</span>
-                </div>
-                <div class="progress" style="height: 6px;">
-                  <div class="progress-bar bg-warning" style="width: 50%"></div>
-                </div>
-              </div>
-              <div class="mb-4">
-                <div class="d-flex justify-content-between mb-1">
-                  <span>Digital Ads</span>
-                  <span>80%</span>
-                </div>
-                <div class="progress" style="height: 6px;">
-                  <div class="progress-bar bg-info" style="width: 80%"></div>
-                </div>
-              </div>
-              <div>
-                <div class="d-flex justify-content-between mb-1">
-                  <span>Others</span>
-                  <span>15%</span>
-                </div>
-                <div class="progress" style="height: 6px;">
-                  <div class="progress-bar bg-danger" style="width: 15%"></div>
+              <div class="mt-3">
+                <div class="row text-center">
+                  <div class="col-6 mb-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                      <div class="rounded-circle bg-primary" style="width: 12px; height: 12px;"></div>
+                      <small class="ms-2">Social Media</small>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                      <div class="rounded-circle bg-success" style="width: 12px; height: 12px;"></div>
+                      <small class="ms-2">Marketplaces</small>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                      <div class="rounded-circle bg-warning" style="width: 12px; height: 12px;"></div>
+                      <small class="ms-2">Websites</small>
+                    </div>
+                  </div>
+                  <div class="col-6 mb-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                      <div class="rounded-circle bg-info" style="width: 12px; height: 12px;"></div>
+                      <small class="ms-2">Digital Ads</small>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -240,53 +229,261 @@
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h5 class="card-title mb-0">Property List</h5>
             <div class="btn-group">
-              <button class="btn btn-primary btn-sm active">Popular</button>
-              <button class="btn btn-outline-primary btn-sm">Recommended</button>
-              <button class="btn btn-outline-primary btn-sm">Newest</button>
+              <button class="btn btn-primary btn-sm active" data-filter="popular">Popular</button>
+              <button class="btn btn-outline-primary btn-sm" data-filter="recommended">Recommended</button>
+              <button class="btn btn-outline-primary btn-sm" data-filter="newest">Newest</button>
             </div>
           </div>
           <div class="row g-4">
-            <div class="col-md-4">
-              <div class="card border-0 shadow-sm">
-                <img src="https://source.unsplash.com/800x600/?apartment" class="card-img-top" alt="Property" style="height: 200px; object-fit: cover;">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="card-title mb-0">Star Sun Hotel & Apartment</h6>
-                    <span class="badge bg-primary">$500</span>
+            <% if (properties && properties.length > 0) { %>
+              <% properties.forEach((property, index) => { %>
+                <div class="col-md-4">
+                  <div class="card border-0 shadow-sm">
+                    <img src="<%= property.image %>" 
+                         class="card-img-top" 
+                         alt="<%= property.title %>" 
+                         style="height: 200px; object-fit: cover;"
+                         onerror="this.src='https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="card-title mb-0"><%= property.title %></h6>
+                        <span class="badge bg-primary">$<%= property.price.toLocaleString() %></span>
+                      </div>
+                      <small class="text-muted"><i class="bi bi-geo-alt me-1"></i><%= property.location %></small>
+                    </div>
                   </div>
-                  <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>North Carolina, USA</small>
+                </div>
+              <% }); %>
+            <% } else { %>
+              <div class="col-12">
+                <div class="text-center py-4">
+                  <i class="bi bi-building display-4 text-muted mb-3"></i>
+                  <h5 class="text-muted">No properties found</h5>
+                  <p class="text-muted">Add some properties to see them here.</p>
+                  <a href="/property/add" class="btn btn-primary">Add Property</a>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card border-0 shadow-sm">
-                <img src="https://source.unsplash.com/800x600/?house" class="card-img-top" alt="Property" style="height: 200px; object-fit: cover;">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="card-title mb-0">Letdo Ji Hotel & Apartment</h6>
-                    <span class="badge bg-primary">$400</span>
-                  </div>
-                  <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>New York City, USA</small>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card border-0 shadow-sm">
-                <img src="https://source.unsplash.com/800x600/?building" class="card-img-top" alt="Property" style="height: 200px; object-fit: cover;">
-                <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="card-title mb-0">Metro Jayakar Apartment</h6>
-                    <span class="badge bg-primary">$600</span>
-                  </div>
-                  <small class="text-muted"><i class="bi bi-geo-alt me-1"></i>North Carolina, USA</small>
-                </div>
-              </div>
-            </div>
+            <% } %>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+// Dark Mode Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const darkModeIcon = document.getElementById('darkModeIcon');
+  const body = document.body;
+
+  // Check for saved dark mode preference or default to light mode
+  const isDarkMode = localStorage.getItem('darkMode') === 'true';
+  
+  // Apply the saved preference
+  if (isDarkMode) {
+    body.classList.add('dark-mode');
+    darkModeIcon.className = 'bi bi-sun-fill';
+  }
+
+  // Toggle dark mode
+  darkModeToggle.addEventListener('click', function() {
+    body.classList.toggle('dark-mode');
+    const isNowDark = body.classList.contains('dark-mode');
+    
+    // Update icon
+    darkModeIcon.className = isNowDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+    
+    // Save preference
+    localStorage.setItem('darkMode', isNowDark);
+  });
+
+  // Property Filter Functionality
+  const filterButtons = document.querySelectorAll('[data-filter]');
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Remove active class from all buttons
+      filterButtons.forEach(btn => {
+        btn.classList.remove('btn-primary', 'active');
+        btn.classList.add('btn-outline-primary');
+      });
+      
+      // Add active class to clicked button
+      this.classList.remove('btn-outline-primary');
+      this.classList.add('btn-primary', 'active');
+      
+      // Here you could add AJAX call to fetch filtered properties
+      const filter = this.getAttribute('data-filter');
+      console.log(`Filtering properties by: ${filter}`);
+      
+      // For now, just show a loading effect
+      const propertyContainer = document.querySelector('.row.g-4');
+      propertyContainer.style.opacity = '0.6';
+      
+      setTimeout(() => {
+        propertyContainer.style.opacity = '1';
+      }, 500);
+    });
+  });
+
+  // Revenue Chart Implementation with real data
+  const ctx = document.getElementById('revenueChart').getContext('2d');
+  
+  // Get real monthly revenue data from server
+  const monthlyRevenue = <%= JSON.stringify(stats.monthlyRevenue) %>;
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  
+  const chartData = {
+    week: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      data: [12000, 15000, 8000, 22000, 18000, 25000, 20000],
+      title: '$120,000',
+      change: '2.1%'
+    },
+    month: {
+      labels: monthNames,
+      data: monthlyRevenue,
+      title: '$' + monthlyRevenue.reduce((a, b) => a + b, 0).toLocaleString(),
+      change: '<%= stats.revenueGrowth %>%'
+    },
+    year: {
+      labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+      data: [
+        monthlyRevenue.slice(0, 3).reduce((a, b) => a + b, 0),
+        monthlyRevenue.slice(3, 6).reduce((a, b) => a + b, 0),
+        monthlyRevenue.slice(6, 9).reduce((a, b) => a + b, 0),
+        monthlyRevenue.slice(9, 12).reduce((a, b) => a + b, 0)
+      ],
+      title: '$' + monthlyRevenue.reduce((a, b) => a + b, 0).toLocaleString(),
+      change: '<%= stats.revenueGrowth %>%'
+    }
+  };
+
+  let currentChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: chartData.month.labels,
+      datasets: [{
+        label: 'Revenue',
+        data: chartData.month.data,
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: '#2563eb',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(0,0,0,0.1)'
+          },
+          ticks: {
+            callback: function(value) {
+              return '$' + (value / 1000) + 'K';
+            }
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          }
+        }
+      },
+      elements: {
+        point: {
+          hoverRadius: 8
+        }
+      }
+    }
+  });
+
+  // Chart period buttons functionality
+  const updateChart = (period) => {
+    const data = chartData[period];
+    
+    // Update chart data
+    currentChart.data.labels = data.labels;
+    currentChart.data.datasets[0].data = data.data;
+    currentChart.update('active');
+    
+    // Update revenue display
+    document.querySelector('.card-title + div h3').textContent = data.title;
+    document.querySelector('.badge.bg-success').innerHTML = `${data.change} <i class="bi bi-arrow-up"></i>`;
+  };
+
+  // Button event listeners
+  document.getElementById('btn-1w').addEventListener('click', function() {
+    document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    updateChart('week');
+  });
+
+  document.getElementById('btn-1m').addEventListener('click', function() {
+    document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    updateChart('month');
+  });
+
+  document.getElementById('btn-1y').addEventListener('click', function() {
+    document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    updateChart('year');
+  });
+
+  // Property Referrals Doughnut Chart
+  const referralsCtx = document.getElementById('referralsChart').getContext('2d');
+  
+  new Chart(referralsCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Social Media', 'Marketplaces', 'Websites', 'Digital Ads'],
+      datasets: [{
+        data: [64, 40, 50, 80],
+        backgroundColor: [
+          '#2563eb', // Primary blue
+          '#059669', // Success green  
+          '#d97706', // Warning orange
+          '#0891b2'  // Info cyan
+        ],
+        borderWidth: 0,
+        cutout: '65%'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.label + ': ' + context.parsed + '%';
+            }
+          }
+        }
+      }
+    }
+  });
+});
+</script>
 
 <%- include('foot') -%>

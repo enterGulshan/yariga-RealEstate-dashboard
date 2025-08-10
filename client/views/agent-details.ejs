@@ -52,6 +52,9 @@
           <h5 class="mb-0 fw-bold">Agent Details</h5>
         </div>
         <div class="d-flex align-items-center">
+          <a href="/agent/edit/<%= agent._id %>" class="btn btn-primary me-3">
+            <i class="bi bi-pencil me-2"></i>Edit Agent
+          </a>
           <div class="position-relative me-3">
             <button class="btn btn-light rounded-circle position-relative">
               <i class="bi bi-bell"></i>
@@ -109,12 +112,15 @@
               </div>
               
               <div class="d-grid gap-2">
-                <button class="btn btn-primary">
-                  <i class="bi bi-chat-dots me-2"></i>Message
-                </button>
-                <button class="btn btn-outline-primary">
-                  <i class="bi bi-telephone me-2"></i>Call
-                </button>
+                <a href="/agent/edit/<%= agent._id %>" class="btn btn-primary">
+                  <i class="bi bi-pencil me-2"></i>Edit Agent
+                </a>
+                <a href="mailto:<%= agent.email %>" class="btn btn-outline-primary">
+                  <i class="bi bi-envelope me-2"></i>Send Email
+                </a>
+                <a href="tel:<%= agent.phone %>" class="btn btn-outline-secondary">
+                  <i class="bi bi-telephone me-2"></i>Call Agent
+                </a>
               </div>
             </div>
           </div>
@@ -151,7 +157,7 @@
                 <div class="col-md-3">
                   <div class="stat-card bg-info bg-opacity-10 p-3 rounded text-center">
                     <i class="bi bi-star text-info" style="font-size: 2rem;"></i>
-                    <h3 class="text-info fw-bold mt-2"><%= agent.rating.toFixed(1) %></h3>
+                    <h3 class="text-info fw-bold mt-2"><%= (agent.rating || 4.5).toFixed(1) %></h3>
                     <p class="text-muted mb-0">Rating</p>
                   </div>
                 </div>
@@ -167,24 +173,22 @@
                 <div class="col-md-6">
                   <div class="info-item mb-3">
                     <label class="text-muted small">Agency Name</label>
-                    <p class="fw-bold mb-0"><%= agent.agencyName %></p>
+                    <p class="fw-bold mb-0"><%= agent.agency %></p>
                   </div>
                   <div class="info-item mb-3">
                     <label class="text-muted small">License Number</label>
-                    <p class="fw-bold mb-0"><%= agent.licenseNumber %></p>
+                    <p class="fw-bold mb-0"><%= agent.agentLicense %></p>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="info-item mb-3">
                     <label class="text-muted small">Experience</label>
-                    <p class="fw-bold mb-0"><%= agent.experienceYears %> years</p>
+                    <p class="fw-bold mb-0">Professional Agent</p>
                   </div>
                   <div class="info-item mb-3">
-                    <label class="text-muted small">Specialization</label>
+                    <label class="text-muted small">Service Area</label>
                     <div>
-                      <% agent.specializations.forEach(spec => { %>
-                        <span class="badge bg-light text-dark me-1"><%= spec %></span>
-                      <% }); %>
+                      <span class="badge bg-primary text-white"><%= agent.serviceArea %></span>
                     </div>
                   </div>
                 </div>
@@ -196,7 +200,11 @@
           <div class="card border-0 shadow-sm">
             <div class="card-body p-4">
               <h5 class="card-title mb-3">About</h5>
-              <p class="text-muted mb-0"><%= agent.bio %></p>
+              <p class="text-muted mb-0">
+                Experienced real estate agent specializing in <%= agent.serviceArea %> area. 
+                Licensed professional with <%= agent.agentLicense %> committed to providing 
+                exceptional service to clients in <%= agent.city %>, <%= agent.country %>.
+              </p>
             </div>
           </div>
         </div>

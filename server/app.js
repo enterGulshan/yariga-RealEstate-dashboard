@@ -16,6 +16,10 @@ const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashboard');
 const propertyRoutes = require('./routes/property');
 const agentRoutes = require('./routes/agent');
+const adminRoutes = require('./routes/admin');
+const reviewRoutes = require('./routes/review');
+const messageRoutes = require('./routes/message');
+const profileRoutes = require('./routes/profile');
 
 const app = express();
 
@@ -72,6 +76,10 @@ app.use('/', authRoutes);
 app.use('/', dashboardRoutes);
 app.use('/', propertyRoutes);
 app.use('/', agentRoutes);
+app.use('/', adminRoutes);
+app.use('/', reviewRoutes);
+app.use('/', messageRoutes);
+app.use('/', profileRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

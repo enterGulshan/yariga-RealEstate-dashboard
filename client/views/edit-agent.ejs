@@ -1,4 +1,4 @@
-<%- include('head', { title: 'YARIGA - Add Agent' }) -%>
+<%- include('head', { title: 'YARIGA - Edit Agent' }) -%>
 
 <div class="dashboard-layout">
   <!-- Sidebar -->
@@ -46,10 +46,10 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
       <div class="container-fluid px-4">
         <div class="d-flex align-items-center">
-          <a href="/agent" class="btn btn-light me-3">
+          <a href="/agent/<%= agent._id %>" class="btn btn-light me-3">
             <i class="bi bi-arrow-left"></i>
           </a>
-          <h5 class="mb-0 fw-bold">Add New Agent</h5>
+          <h5 class="mb-0 fw-bold">Edit Agent</h5>
         </div>
         <div class="d-flex align-items-center">
           <div class="position-relative me-3">
@@ -79,9 +79,9 @@
         <div class="col-lg-8">
           <div class="card border-0 shadow-sm">
             <div class="card-body p-4">
-              <h5 class="card-title mb-4">Agent Information</h5>
+              <h5 class="card-title mb-4">Edit Agent Information</h5>
               
-              <form method="POST" action="/agent/add" enctype="multipart/form-data" novalidate>
+              <form method="POST" action="/agent/edit/<%= agent._id %>" enctype="multipart/form-data" novalidate>
                 <!-- Personal Information -->
                 <div class="row mb-4">
                   <div class="col-12">
@@ -93,7 +93,7 @@
                     <label class="form-label">Profile Picture</label>
                     <div class="d-flex align-items-center">
                       <div class="avatar-preview me-3">
-                        <img id="avatarPreview" src="https://ui-avatars.com/api/?name=Agent&background=e3f2fd&color=1976d2&size=80" 
+                        <img id="avatarPreview" src="<%= agent.avatar %>" 
                              class="rounded-circle" width="80" height="80" style="object-fit: cover;">
                       </div>
                       <div>
@@ -105,25 +105,25 @@
                   
                   <div class="col-md-6 mb-3">
                     <label for="firstName" class="form-label">First Name *</label>
-                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    <input type="text" class="form-control" id="firstName" name="firstName" value="<%= agent.firstName %>" required>
                     <div class="invalid-feedback">Please provide a valid first name.</div>
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="lastName" class="form-label">Last Name *</label>
-                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                    <input type="text" class="form-control" id="lastName" name="lastName" value="<%= agent.lastName %>" required>
                     <div class="invalid-feedback">Please provide a valid last name.</div>
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="email" class="form-label">Email Address *</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control" id="email" name="email" value="<%= agent.email %>" required>
                     <div class="invalid-feedback">Please provide a valid email address.</div>
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="phone" class="form-label">Phone Number *</label>
-                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                    <input type="tel" class="form-control" id="phone" name="phone" value="<%= agent.phone %>" required>
                     <div class="invalid-feedback">Please provide a valid phone number.</div>
                   </div>
                 </div>
@@ -141,29 +141,29 @@
                   
                   <div class="col-md-6 mb-3">
                     <label for="city" class="form-label">City *</label>
-                    <input type="text" class="form-control" id="city" name="city" required>
+                    <input type="text" class="form-control" id="city" name="city" value="<%= agent.city %>" required>
                     <div class="invalid-feedback">Please provide a city.</div>
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="state" class="form-label">State/Province</label>
-                    <input type="text" class="form-control" id="state" name="state">
+                    <input type="text" class="form-control" id="state" name="state" value="<%= agent.state || '' %>">
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="country" class="form-label">Country *</label>
                     <select class="form-select" id="country" name="country" required>
                       <option value="">Select Country</option>
-                      <option value="United States">United States</option>
-                      <option value="Canada">Canada</option>
-                      <option value="United Kingdom">United Kingdom</option>
-                      <option value="Australia">Australia</option>
-                      <option value="Germany">Germany</option>
-                      <option value="France">France</option>
-                      <option value="Spain">Spain</option>
-                      <option value="Italy">Italy</option>
-                      <option value="Netherlands">Netherlands</option>
-                      <option value="Other">Other</option>
+                      <option value="United States" <%= agent.country === 'United States' ? 'selected' : '' %>>United States</option>
+                      <option value="Canada" <%= agent.country === 'Canada' ? 'selected' : '' %>>Canada</option>
+                      <option value="United Kingdom" <%= agent.country === 'United Kingdom' ? 'selected' : '' %>>United Kingdom</option>
+                      <option value="Australia" <%= agent.country === 'Australia' ? 'selected' : '' %>>Australia</option>
+                      <option value="Germany" <%= agent.country === 'Germany' ? 'selected' : '' %>>Germany</option>
+                      <option value="France" <%= agent.country === 'France' ? 'selected' : '' %>>France</option>
+                      <option value="Spain" <%= agent.country === 'Spain' ? 'selected' : '' %>>Spain</option>
+                      <option value="Italy" <%= agent.country === 'Italy' ? 'selected' : '' %>>Italy</option>
+                      <option value="Netherlands" <%= agent.country === 'Netherlands' ? 'selected' : '' %>>Netherlands</option>
+                      <option value="Other" <%= agent.country === 'Other' ? 'selected' : '' %>>Other</option>
                     </select>
                     <div class="invalid-feedback">Please select a country.</div>
                   </div>
@@ -177,45 +177,45 @@
                   
                   <div class="col-md-6 mb-3">
                     <label for="agency" class="form-label">Agency Name *</label>
-                    <input type="text" class="form-control" id="agency" name="agency" required>
+                    <input type="text" class="form-control" id="agency" name="agency" value="<%= agent.agency %>" required>
                     <div class="invalid-feedback">Please provide an agency name.</div>
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="agentLicense" class="form-label">Agent License *</label>
-                    <input type="text" class="form-control" id="agentLicense" name="agentLicense" required>
+                    <input type="text" class="form-control" id="agentLicense" name="agentLicense" value="<%= agent.agentLicense %>" required>
                     <div class="invalid-feedback">Please provide a license number.</div>
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="taxNumber" class="form-label">Tax Number *</label>
-                    <input type="text" class="form-control" id="taxNumber" name="taxNumber" required>
+                    <input type="text" class="form-control" id="taxNumber" name="taxNumber" value="<%= agent.taxNumber %>" required>
                     <div class="invalid-feedback">Please provide a tax number.</div>
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="serviceArea" class="form-label">Service Area *</label>
-                    <input type="text" class="form-control" id="serviceArea" name="serviceArea" required placeholder="e.g., Downtown, North City, etc.">
+                    <input type="text" class="form-control" id="serviceArea" name="serviceArea" value="<%= agent.serviceArea %>" required placeholder="e.g., Downtown, North City, etc.">
                     <div class="invalid-feedback">Please provide the service area.</div>
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="dateOfBirth" class="form-label">Date of Birth</label>
-                    <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth">
+                    <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" value="<%= agent.dateOfBirth ? agent.dateOfBirth.toISOString().split('T')[0] : '' %>">
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="gender" class="form-label">Gender</label>
                     <select class="form-select" id="gender" name="gender">
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
+                      <option value="Male" <%= agent.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                      <option value="Female" <%= agent.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                      <option value="Other" <%= agent.gender === 'Other' ? 'selected' : '' %>>Other</option>
                     </select>
                   </div>
                   
                   <div class="col-md-6 mb-3">
                     <label for="zipCode" class="form-label">Zip Code</label>
-                    <input type="text" class="form-control" id="zipCode" name="zipCode">
+                    <input type="text" class="form-control" id="zipCode" name="zipCode" value="<%= agent.zipCode || '' %>">
                   </div>
                   
                   <div class="col-12 mb-3">
@@ -294,9 +294,9 @@
                   <div class="col-12">
                     <div class="d-flex gap-2">
                       <button type="submit" class="btn btn-primary px-4">
-                        <i class="bi bi-plus-circle me-2"></i>Add Agent
+                        <i class="bi bi-check-circle me-2"></i>Update Agent
                       </button>
-                      <a href="/agent" class="btn btn-outline-secondary px-4">Cancel</a>
+                      <a href="/agent/<%= agent._id %>" class="btn btn-outline-secondary px-4">Cancel</a>
                     </div>
                   </div>
                 </div>

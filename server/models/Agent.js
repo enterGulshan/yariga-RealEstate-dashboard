@@ -58,7 +58,9 @@ const agentSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: 'https://ui-avatars.com/api/?background=random'
+    default: function() {
+      return `https://ui-avatars.com/api/?name=${this.firstName}+${this.lastName}&background=random&color=fff&size=400`;
+    }
   },
   properties: [{
     type: mongoose.Schema.Types.ObjectId,

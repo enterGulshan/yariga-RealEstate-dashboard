@@ -11,7 +11,7 @@ const sampleProperties = [
     area: "28M",
     type: "Hotel",
     status: "For Sale",
-    image: "https://source.unsplash.com/800x600/?luxury-hotel",
+    image: "https://source.unsplash.com/800x600/?luxury-hotel,spa",
     description: "Luxury hotel with spa facilities in prime location"
   },
   {
@@ -22,13 +22,57 @@ const sampleProperties = [
     area: "29M",
     type: "Hotel",
     status: "For Rent",
-    image: "https://source.unsplash.com/800x600/?hotel-apartment",
+    image: "https://source.unsplash.com/800x600/?hotel-apartment,modern",
     description: "Modern hotel apartment with stunning city views"
   },
   {
     title: "Lavender Apartment",
     price: 5000,
     location: "North Carolina, USA",
+    beds: 3,
+    area: "25M",
+    type: "Apartment",
+    status: "For Sale",
+    image: "https://source.unsplash.com/800x600/?modern-apartment,interior",
+    description: "Beautiful apartment with modern amenities"
+  },
+  {
+    title: "Skyline Modern Villa",
+    price: 12000,
+    location: "California, USA",
+    beds: 5,
+    area: "45M",
+    type: "Villa",
+    status: "For Sale",
+    image: "https://source.unsplash.com/800x600/?luxury-villa,modern",
+    description: "Stunning modern villa with panoramic views"
+  },
+  {
+    title: "Downtown Commercial Space",
+    price: 8500,
+    location: "New York, USA",
+    beds: 0,
+    area: "150M",
+    type: "Commercial",
+    status: "For Rent",
+    image: "https://source.unsplash.com/800x600/?office-building,commercial",
+    description: "Prime commercial space in downtown area"
+  },
+  {
+    title: "Cozy Family House",
+    price: 4500,
+    location: "Texas, USA",
+    beds: 4,
+    area: "35M",
+    type: "House",
+    status: "For Sale",
+    image: "https://source.unsplash.com/800x600/?family-house,suburban",
+    description: "Perfect family home in quiet neighborhood"
+  },
+  {
+    title: "Historic Townhouse",
+    price: 4300,
+    location: "Boston, MA",
     beds: 3,
     area: "26M",
     type: "Apartment",

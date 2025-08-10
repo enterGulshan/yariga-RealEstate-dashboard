@@ -1,0 +1,75 @@
+<%- include('../partials/head', { title: 'YARIGA - Admin Dashboard' }) %>
+<%- include('../partials/sidebar') %>
+
+<div class="main-content">
+  <%- include('../partials/header') %>
+
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>User Management</h2>
+    </div>
+
+    <%- message %>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% users.forEach(function(user) { %>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="<%= user.profilePicture %>" alt="<%= user.name %>" class="rounded-circle me-2" width="32" height="32">
+                      <%= user.username %>
+                    </div>
+                  </td>
+                  <td><%= user.name %></td>
+                  <td><%= user.email || 'N/A' %></td>
+                  <td>
+                    <form action="/admin/users/<%= user._id %>/update-role" method="POST" class="d-inline">
+                      <select name="role" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
+                        <option value="agent" <%= user.role === 'agent' ? 'selected' : '' %>>Agent</option>
+                        <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                      </select>
+                    </form>
+                  </td>
+                  <td>
+                    <span class="badge <%= user.isActive ? 'bg-success' : 'bg-danger' %>">
+                      <%= user.isActive ? 'Active' : 'Inactive' %>
+                    </span>
+                  </td>
+                  <td><%= new Date(user.createdAt).toLocaleDateString() %></td>
+                  <td>
+                    <div class="btn-group">
+                      <a href="/admin/users/<%= user._id %>" class="btn btn-sm btn-outline-primary">View</a>
+                      <form action="/admin/users/<%= user._id %>/toggle-status" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-outline-<%= user.isActive ? 'danger' : 'success' %>">
+                          <%= user.isActive ? 'Deactivate' : 'Activate' %>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/foot') %>

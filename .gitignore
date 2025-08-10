@@ -120,5 +120,11 @@ data/
 uploads/
 
 # Package-lock files (choose one)
-# package-lock.json
-# yarn.lock
+package-lock.json
+yarn.lock
+
+# Large generated files and uploads
+public/images/uploads/
+client/public/images/uploads/
+temp/
+*.tmp
